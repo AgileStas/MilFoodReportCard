@@ -1,0 +1,26 @@
+﻿<Window x:Class="MilFoodReportCard.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MilFoodReportCard"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        Loaded="OnLoaded">
+    <StackPanel Margin="12">
+        <Label Content="Військова частина" DataContext=""/>
+        <ComboBox Name="cbDivisions" SelectionChanged="cbDivisions_SelectionChanged"/>
+        <Label Content="Дата (всередині періоду)"/>
+        <DatePicker Name="dpDate" SelectedDateChanged="dpDate_SelectedDateChanged"/>
+        <Label Name="lblPeriod" Content="Період:"/>
+        <Label Content="Доступні розкладки"/>
+        <ListBox Name="lbLayouts" MinHeight="64" ItemsSource="{Binding}" DisplayMemberPath="NutritionKind" SelectionChanged="lbLayouts_SelectionChanged"/>
+        <StackPanel Orientation="Horizontal">
+            <Button Name="btnRemains" Content="Залишки" Margin="6" IsEnabled="False" Click="btnRemains_Click"/>
+            <Button Name="btnYielding" Content="Накладна на видачу" Margin="6" IsEnabled="False" Click="btnYielding_Click"/>
+            <Button Name="btnWritingOff" Content="Накладна на списання" Margin="6" IsEnabled="False" Click="btnWritingOff_Click"/>
+            <Button Name="btnFedCnt" Content="Стройова записка" Margin="6" IsEnabled="False" Click="btnFedCnt_Click"/>
+            <Button Name="btnAgreements" Content="Договора" Margin="6" Click="btnAgreements_Click"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

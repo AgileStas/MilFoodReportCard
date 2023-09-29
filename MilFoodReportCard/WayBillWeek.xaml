@@ -1,0 +1,50 @@
+﻿<Window x:Class="MilFoodReportCard.WayBillWeek"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MilFoodReportCard"
+        mc:Ignorable="d"
+        Title="WayBillWeek" Height="250" Width="400">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Content="Номер накладної"/>
+        <TextBox Grid.Row="0" Grid.Column="1" Name="tbWbNumber"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Вантажоодержувач"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Name="tbWbCustomer"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Відповідальний одержувач"/>
+        <DockPanel Grid.Row="2" Grid.Column="1">
+            <TextBox DockPanel.Dock="Left" Name="tbWbRecipientRank" Width="48"/>
+            <TextBox DockPanel.Dock="Right" Name="tbWbRecipient" />
+        </DockPanel>
+
+        <Label Grid.Row="3" Grid.Column="0" Content="Дата операції"/>
+        <DatePicker Grid.Row="3" Grid.Column="1" Name="dpWbDate"/>
+
+        <Label Grid.Row="4" Grid.Column="0" Content="Кількість військовослужбовців"/>
+        <TextBox Grid.Row="4" Grid.Column="1" Name="tbWbFedNumber"/>
+
+        <Label Grid.Row="5" Grid.Column="0" Content="Формат звіту"/>
+        <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
+            <RadioButton Name="rbWbOutputHtml" Content="HTML" IsChecked="True"/>
+            <RadioButton Name="rbWbOutputXls" Content="XLS"/>
+        </StackPanel>
+
+        <Button Grid.Row="6" Grid.Column="0" Name="btnOk" Content="Згенерувати" Margin="6,0,6,6" Height="21" VerticalAlignment="Bottom" Click="btnOk_Click"/>
+        <Button Grid.Row="6" Grid.Column="1" Name="btnCancel" Content="Відміна" Margin="6" Click="btnCancel_Click"/>
+    </Grid>
+</Window>
