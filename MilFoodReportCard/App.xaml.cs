@@ -102,6 +102,14 @@ namespace MilFoodReportCard
             //{
             //    Directory.CreateDirectory(outputDirectory);
             //}
+            var oledb12Installed = new System.Data.OleDb.OleDbEnumerator()
+                .GetElements().AsEnumerable()
+                .Any(x => x.Field<string>("SOURCES_NAME") == "Microsoft.ACE.OLEDB.12.0");
+            if (!oledb12Installed)
+            {
+                MessageBox.Show("You have no Microsoft.ACE.OLEDB.12.0 provider installed. Check Microsoft Access Database Engine 2016 Redistributable at https://www.microsoft.com/en-us/download/details.aspx?id=54920");
+                this.Shutdown(1);
+            }
         }
     }
 }

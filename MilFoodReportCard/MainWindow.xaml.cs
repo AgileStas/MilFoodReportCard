@@ -611,7 +611,7 @@ namespace MilFoodReportCard
                     && o1.OutgoingsDoc.WritingOffSum != null)
                 .GroupBy(g => new
                 {
-                    LayoutDate = g.OutgoingsDoc.LayoutDate,
+                    LayoutDate = g.OutgoingsDoc.LayoutDate.Date,
                     ProductId = g.ProductId,
                 })
                 .Select(s => new
@@ -668,12 +668,13 @@ namespace MilFoodReportCard
             //var oq = outgoings.ToQueryString();
             var fedLayoutItems = dbContext.FedLayouts
                 .Where(fl => outgoings.Contains(fl.LayoutId)
-                    && (fl.IsSetProgrammatically == null || fl.IsSetProgrammatically == false))
+                    && (fl.IsSetProgrammatically == null || fl.IsSetProgrammatically == false)
+                    && fl.Weight != 0)
                 .GroupBy(g => new
                 {
                     MealId = g.MealId,
                     Weight = g.Weight,
-                    Date = g.Date,
+                    Date = g.Date.Date,
                 })
                 .Select(s => new
                 {
@@ -1018,7 +1019,7 @@ namespace MilFoodReportCard
                     && o1.OutgoingsDoc.WritingOffSum != null)
                 .GroupBy(g => new
                 {
-                    LayoutDate = g.OutgoingsDoc.LayoutDate,
+                    LayoutDate = g.OutgoingsDoc.LayoutDate.Date,
                     MealId = g.MealId,
                     ProductId = g.ProductId,
                 })
