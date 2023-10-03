@@ -22,5 +22,8 @@
             <Button Name="btnFedCnt" Content="Стройова записка" Margin="6" IsEnabled="False" Click="btnFedCnt_Click"/>
             <Button Name="btnAgreements" Content="Договора" Margin="6" Click="btnAgreements_Click"/>
         </StackPanel>
+        <TextBlock Margin="12" TextAlignment="Center">
+            <Hyperlink NavigateUri="https://github.com/AgileStas/MilFoodReportCard" RequestNavigate="aboutLink_RequestNavigate">More info here</Hyperlink>
+        </TextBlock>
     </StackPanel>
 </Window>

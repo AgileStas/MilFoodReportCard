@@ -1118,5 +1118,12 @@ namespace MilFoodReportCard
 
             return dailyOutgoings;
         }
+
+        private void aboutLink_RequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            var psi = new ProcessStartInfo(e.Uri.AbsoluteUri) { UseShellExecute = true };
+            Process.Start(psi);
+            e.Handled = true;
+        }
     }
 }
