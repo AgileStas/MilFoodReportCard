@@ -328,7 +328,7 @@ namespace MilFoodReportCard
             //outputData.customerPersonName = "Ім'я Прізвище";
             //outputData.customerKits = 100;
 
-            var wbInfoDlg = new WayBillWeek();
+            var wbInfoDlg = new WayBillWeek(dPeriod);
             wbInfoDlg.dpWbDate.SelectedDate = DateTime.Now;
             var rv = wbInfoDlg.ShowDialog();
             switch (rv)
@@ -343,10 +343,17 @@ namespace MilFoodReportCard
             outputData.customerPersonName = wbInfoDlg.tbWbRecipient.Text.Trim();
             outputData.docDate = wbInfoDlg.dpWbDate.SelectedDate.Value;
             outputData.customerKits = int.Parse(wbInfoDlg.tbWbFedNumber.Text.Trim());
+            if (wbInfoDlg.cbWbLimitPeriod.IsChecked == true)
+            {
+                outputData.startDate = wbInfoDlg.dpWbPeriodStart.SelectedDate.Value;
+                outputData.endDate = wbInfoDlg.dpWbPeriodEnd.SelectedDate.Value;
+            }
 
             var layout = lbLayouts.SelectedItem as Layout;
             var entries = dbContext.LayoutEntries
-                .Where(le => le.LayoutId == layout.LayoutId) // Date Start, Date End
+                .Where(le => le.LayoutId == layout.LayoutId
+                    && le.Date >= outputData.startDate
+                    && le.Date < outputData.endDate.Date.AddDays(1)) // Date Start, Date End
                 .GroupBy(g => new { g.ProductId, ProductName = g.Product.Name, AccUoM = g.Product.AccUoM, ScaleUoM = g.Product.ScaleUoM })
                 .Select(e => new WbItemNew
                 {

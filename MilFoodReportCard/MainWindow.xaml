@@ -23,7 +23,7 @@
             <Button Name="btnAgreements" Content="Договора" Margin="6" Click="btnAgreements_Click"/>
         </StackPanel>
         <TextBlock Margin="12" TextAlignment="Center">
-            <Hyperlink NavigateUri="https://github.com/AgileStas/MilFoodReportCard" RequestNavigate="aboutLink_RequestNavigate">More info here</Hyperlink>
+            <Hyperlink NavigateUri="https://github.com/AgileStas/MilFoodReportCard" RequestNavigate="aboutLink_RequestNavigate">Більше інформації про програму</Hyperlink>
         </TextBlock>
     </StackPanel>
 </Window>

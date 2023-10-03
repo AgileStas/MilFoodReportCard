@@ -19,9 +19,16 @@ namespace MilFoodReportCard
     /// </summary>
     public partial class WayBillWeek : Window
     {
-        public WayBillWeek()
+        private ZsuProdPeriod period;
+
+        public WayBillWeek(ZsuProdPeriod period)
         {
             InitializeComponent();
+
+            this.period = period;
+
+            dpWbPeriodStart.SelectedDate = period.GetStartDate();
+            dpWbPeriodEnd.SelectedDate = period.GetEndDate();
         }
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
@@ -40,7 +47,54 @@ namespace MilFoodReportCard
                 return;
             }
 
+            if (cbWbLimitPeriod.IsChecked == true)
+            {
+                DateTime wbPeriodStart;
+                DateTime wbPeriodEnd;
+                if (dpWbPeriodStart.SelectedDate is DateTime startVal)
+                {
+                    wbPeriodStart = startVal;
+                }
+                else
+                {
+                    return;
+                }
+                if (dpWbPeriodEnd.SelectedDate is DateTime endVal)
+                {
+                    wbPeriodEnd = endVal;
+                }
+                else
+                {
+                    return;
+                }
+                if (wbPeriodStart.Date < period.GetStartDate().Date || wbPeriodStart.Date > period.GetEndDate().Date)
+                {
+                    return;
+                }
+                if (wbPeriodEnd.Date < period.GetStartDate().Date || wbPeriodEnd.Date > period.GetEndDate().Date)
+                {
+                    return;
+                }
+                if (wbPeriodStart.Date > wbPeriodEnd.Date)
+                {
+                    return;
+                }
+            }
+
             DialogResult = true;
+        }
+
+        private void cbWbLimitPeriod_Checked(object sender, RoutedEventArgs e)
+        {
+            if (cbWbLimitPeriod.IsChecked != null && cbWbLimitPeriod.IsChecked == true)
+            {
+                dpWbPeriodStart.IsEnabled = true;
+                dpWbPeriodEnd.IsEnabled = true;
+            } else
+            {
+                dpWbPeriodStart.IsEnabled = false;
+                dpWbPeriodEnd.IsEnabled = false;
+            }
         }
     }
 }

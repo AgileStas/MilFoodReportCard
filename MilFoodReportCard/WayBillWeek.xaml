@@ -19,6 +19,8 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0" Content="Номер накладної"/>
         <TextBox Grid.Row="0" Grid.Column="1" Name="tbWbNumber"/>
@@ -44,7 +46,11 @@
             <RadioButton Name="rbWbOutputXls" Content="XLS"/>
         </StackPanel>
 
-        <Button Grid.Row="6" Grid.Column="0" Name="btnOk" Content="Згенерувати" Margin="6,0,6,6" Height="21" VerticalAlignment="Bottom" Click="btnOk_Click"/>
-        <Button Grid.Row="6" Grid.Column="1" Name="btnCancel" Content="Відміна" Margin="6" Click="btnCancel_Click"/>
+        <CheckBox Grid.Row="6" Grid.Column="0" Name="cbWbLimitPeriod" Content="Обмежити період" Checked="cbWbLimitPeriod_Checked" Unchecked="cbWbLimitPeriod_Checked"/>
+        <DatePicker Grid.Row="7" Grid.Column="0" Name="dpWbPeriodStart" IsEnabled="False"/>
+        <DatePicker Grid.Row="7" Grid.Column="1" Name="dpWbPeriodEnd" IsEnabled="False"/>
+
+        <Button Grid.Row="8" Grid.Column="0" Name="btnOk" Content="Згенерувати" Margin="6,0,6,6" Height="21" VerticalAlignment="Bottom" Click="btnOk_Click"/>
+        <Button Grid.Row="8" Grid.Column="1" Name="btnCancel" Content="Відміна" Margin="6" Click="btnCancel_Click"/>
     </Grid>
 </Window>
