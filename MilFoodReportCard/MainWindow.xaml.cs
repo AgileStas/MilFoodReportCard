@@ -240,7 +240,16 @@ namespace MilFoodReportCard
                 "Templates",
                 "remains.html"};
             var tplFilename = System.IO.Path.Combine(tplPath);
-            var htmlTemplate = System.IO.File.ReadAllText(tplFilename);
+            string htmlTemplate;
+            try
+            {
+                htmlTemplate = System.IO.File.ReadAllText(tplFilename);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex}");
+                return;
+            }
             if (_parser.TryParse(htmlTemplate, out var template, out var error))
             {
                 //var options = new TemplateOptions { Trimming = TrimmingFlags.TagRight };
@@ -405,7 +414,16 @@ namespace MilFoodReportCard
                 "Templates",
                 "waybill.html"};
                 var tplFilename = System.IO.Path.Combine(tplPath);
-                var htmlTemplate = System.IO.File.ReadAllText(tplFilename);
+                string htmlTemplate;
+                try
+                {
+                    htmlTemplate = System.IO.File.ReadAllText(tplFilename);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex}");
+                    return;
+                }
                 if (_parser.TryParse(htmlTemplate, out var template, out var error))
                 {
                     //var options = new TemplateOptions { Trimming = TrimmingFlags.TagRight };
@@ -823,6 +841,10 @@ namespace MilFoodReportCard
                 docIdx++;
             }
             var fedDays = new DateTime[7 + 1]; // Next day after this period
+            for (var dayIdx = 0; dayIdx <= 7; dayIdx++)
+            {
+                fedDays[dayIdx] = zsuPeriodStart.AddDays(dayIdx);
+            }
             var fedTotal = new double[7];
             double fedTotalTotal = 0;
             var fedBreakfast = new double[7];
@@ -831,28 +853,50 @@ namespace MilFoodReportCard
             var fedProds = new double[7 * productsCount];
             var fedProdsTotal = new double[productsCount];
             var foodKitsArray = foodKits.Keys.ToArray();
-            for (var dayIdx = 0; dayIdx < 7; dayIdx++)
+            // Total, Breakfast, Launch, Dinner
+            if (foodKitsArray.Count() < 4)
             {
-                fedDays[dayIdx] = zsuPeriodStart.AddDays(dayIdx);
-                fedTotal[dayIdx] = foodKits[foodKitsArray[0]][dayIdx];
-                fedTotalTotal += fedTotal[dayIdx];
-                fedBreakfast[dayIdx] = foodKits[foodKitsArray[1]][dayIdx];
-                fedLaunch[dayIdx] = foodKits[foodKitsArray[2]][dayIdx];
-                fedDinner[dayIdx] = foodKits[foodKitsArray[3]][dayIdx];
-                foreach (var prodId in outgoings.Keys)
+            }
+            else
+            { 
+                for (var dayIdx = 0; dayIdx < 7; dayIdx++)
                 {
-                    fedProds[(dayIdx * productsCount) + productIndices[prodId]] = outgoings[prodId][dayIdx];
-                    fedProdsTotal[productIndices[prodId]] += outgoings[prodId][dayIdx];
+                    if (foodKits.Count < dayIdx + 1)
+                    {
+                        break;
+                    }
+                    if (foodKits[foodKitsArray[0]].Count() < dayIdx + 1)
+                    {
+                        break;
+                    }
+                    fedTotal[dayIdx] = foodKits[foodKitsArray[0]][dayIdx];
+                    fedTotalTotal += fedTotal[dayIdx];
+                    fedBreakfast[dayIdx] = foodKits[foodKitsArray[1]][dayIdx];
+                    fedLaunch[dayIdx] = foodKits[foodKitsArray[2]][dayIdx];
+                    fedDinner[dayIdx] = foodKits[foodKitsArray[3]][dayIdx];
+                    foreach (var prodId in outgoings.Keys)
+                    {
+                        fedProds[(dayIdx * productsCount) + productIndices[prodId]] = outgoings[prodId][dayIdx];
+                        fedProdsTotal[productIndices[prodId]] += outgoings[prodId][dayIdx];
+                    }
                 }
             }
-            fedDays[7] = zsuPeriodStart.AddDays(7);
 
             string[] tplPath = {
                 ConfigurationManager.AppSettings.Get("DataDirectory") as string,
                 "Templates",
                 "reportcard.html"};
             var tplFilename = System.IO.Path.Combine(tplPath);
-            var htmlTemplate = System.IO.File.ReadAllText(tplFilename);
+            string htmlTemplate;
+            try
+            {
+                htmlTemplate = System.IO.File.ReadAllText(tplFilename);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex}");
+                return;
+            }
             if (_parser.TryParse(htmlTemplate, out var template, out var error))
             {
                 var context = new TemplateContext();
@@ -972,7 +1016,16 @@ namespace MilFoodReportCard
                 "Templates",
                 "reportcardwb.html"};
             var tplFilename1 = System.IO.Path.Combine(tplPath1);
-            var htmlTemplate1 = System.IO.File.ReadAllText(tplFilename1);
+            string htmlTemplate1;
+            try
+            {
+                htmlTemplate1 = System.IO.File.ReadAllText(tplFilename1);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex}");
+                return;
+            }
             if (_parser.TryParse(htmlTemplate1, out var template1, out var error1))
             {
                 var context = new TemplateContext();
