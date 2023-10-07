@@ -861,10 +861,6 @@ namespace MilFoodReportCard
             { 
                 for (var dayIdx = 0; dayIdx < 7; dayIdx++)
                 {
-                    if (foodKits.Count < dayIdx + 1)
-                    {
-                        break;
-                    }
                     if (foodKits[foodKitsArray[0]].Count() < dayIdx + 1)
                     {
                         break;
