@@ -627,11 +627,11 @@ namespace MilFoodReportCard
         {
             var outgoings = dbContext.Outgoings1
                 .Where(o1 => o1.OutgoingsDoc.Division == division
-                    //&& o1.OutgoingsDoc.DocDate >= period.GetStartDate() 
-                    //&& o1.OutgoingsDoc.DocDate < period.GetEndDate()
-                    && o1.OutgoingsDoc.ProdPeriodYear == period.Year
-                    && o1.OutgoingsDoc.ProdPeriodPeriod == period.Period
-                    && o1.OutgoingsDoc.ProdPeriodWeek == period.Week
+                    && o1.OutgoingsDoc.LayoutDate >= period.GetStartDate().Date 
+                    && o1.OutgoingsDoc.LayoutDate < period.GetEndDate().Date.AddDays(1)
+                    //&& o1.OutgoingsDoc.ProdPeriodYear == period.Year
+                    //&& o1.OutgoingsDoc.ProdPeriodPeriod == period.Period
+                    //&& o1.OutgoingsDoc.ProdPeriodWeek == period.Week
                     //&& o1.OutgoingsDoc.WritingOffType == "списання за меню-розкладкою"
                     && o1.OutgoingsDoc.WritingOffSum != null)
                 .GroupBy(g => new
@@ -684,9 +684,11 @@ namespace MilFoodReportCard
             */
             var outgoings = dbContext.OutgoingsDocFeds
                 .Where(o => o.OutgoingsDoc.Division == division
-                    && o.OutgoingsDoc.ProdPeriodYear == period.Year
-                    && o.OutgoingsDoc.ProdPeriodPeriod == period.Period
-                    && o.OutgoingsDoc.ProdPeriodWeek == period.Week
+                    && o.OutgoingsDoc.LayoutDate >= period.GetStartDate().Date
+                    && o.OutgoingsDoc.LayoutDate < period.GetEndDate().Date.AddDays(1)
+                    //&& o.OutgoingsDoc.ProdPeriodYear == period.Year
+                    //&& o.OutgoingsDoc.ProdPeriodPeriod == period.Period
+                    //&& o.OutgoingsDoc.ProdPeriodWeek == period.Week
                     && o.OutgoingsDoc.WritingOffSum != null)
                 .Select(s => s.FedLayout.LayoutId)
                 .Distinct();
@@ -1066,11 +1068,11 @@ namespace MilFoodReportCard
         {
             var outgoings = dbContext.Outgoings1
                 .Where(o1 => o1.OutgoingsDoc.Division == division
-                    //&& o1.OutgoingsDoc.DocDate >= period.GetStartDate() 
-                    //&& o1.OutgoingsDoc.DocDate < period.GetEndDate()
-                    && o1.OutgoingsDoc.ProdPeriodYear == period.Year
-                    && o1.OutgoingsDoc.ProdPeriodPeriod == period.Period
-                    && o1.OutgoingsDoc.ProdPeriodWeek == period.Week
+                    && o1.OutgoingsDoc.LayoutDate >= period.GetStartDate().Date
+                    && o1.OutgoingsDoc.LayoutDate < period.GetEndDate().Date.AddDays(1)
+                    //&& o1.OutgoingsDoc.ProdPeriodYear == period.Year
+                    //&& o1.OutgoingsDoc.ProdPeriodPeriod == period.Period
+                    //&& o1.OutgoingsDoc.ProdPeriodWeek == period.Week
                     //&& o1.OutgoingsDoc.WritingOffType == "списання за меню-розкладкою"
                     && o1.OutgoingsDoc.WritingOffSum != null)
                 .GroupBy(g => new
