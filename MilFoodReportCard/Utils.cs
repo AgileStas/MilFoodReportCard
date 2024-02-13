@@ -12,27 +12,50 @@ namespace MilFoodReportCard
     {
         public static string Num2Text(int num)
         {
-            string[] ones = { "", "одне", "два", "три", "чотири", "п'ять", "шість", "сім", "вісім", "дев'ять" };
-            string[] tens = { "десять", "одинадцять", "дванадцять", "тринадцять", "чотирнадцять", "п'ятнадцять", "шістнадцять", "сімнадцять", "вісімнадцять", "дев'ятнадцять" };
-            string[] decs = { "", "", "двадцять", "тридцять", "сорок", "п'ятдесят", "шістдесят", "сімндесят", "вісімдесят", "дев'яносто" };
+            static string Num2Text100(int num)
+            {
+                string[] ones = { "", "одне", "два", "три", "чотири", "п'ять", "шість", "сім", "вісім", "дев'ять" };
+                string[] tens = { "десять", "одинадцять", "дванадцять", "тринадцять", "чотирнадцять", "п'ятнадцять", "шістнадцять", "сімнадцять", "вісімнадцять", "дев'ятнадцять" };
+                string[] decs = { "", "", "двадцять", "тридцять", "сорок", "п'ятдесят", "шістдесят", "сімдесят", "вісімдесят", "дев'яносто" };
 
-            if (num == 0)
-            {
-                return "нуль";
+                if (num == 0)
+                {
+                    return "нуль";
+                }
+                else if (num < 10)
+                {
+                    return ones[num];
+                }
+                else if (num < 20)
+                {
+                    return tens[num % 10];
+                }
+                else if (num < 100)
+                {
+                    string ms = decs[num / 10];
+                    string ls = ones[num % 10];
+                    return ls == "" ? ms : ms + " " + ls;
+                }
+                else
+                {
+                    throw new Exception("Not implemented");
+                }
             }
-            else if (num < 10)
+
+            string[] huns = { "", "сто", "двісті", "триста", "чотирста", "п'ятсот", "шістсот", "сімсот", "вісімсот", "дев'ятсот" };
+
+            if (num < 100)
             {
-                return ones[num];
+                return Num2Text100(num);
             }
-            else if (num < 20)
+            else if (num < 1000)
             {
-                return tens[num % 10];
-            }
-            else if (num < 100)
-            {
-                string ms = decs[num / 10];
-                string ls = ones[num % 10];
-                return ls == "" ? ms : ms + " " + ls;
+                string xs = huns[num / 100];
+                if (num % 100 != 0)
+                {
+                    xs += " " + Num2Text100(num % 100);
+                }
+                return xs;
             }
             else
             {
