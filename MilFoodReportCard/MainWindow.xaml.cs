@@ -359,27 +359,65 @@ namespace MilFoodReportCard
             }
 
             var layout = lbLayouts.SelectedItem as Layout;
+            //var entries = dbContext.LayoutEntries
+            //    .Where(le => le.LayoutId == layout.LayoutId
+            //        && le.Date >= outputData.startDate
+            //        && le.Date < outputData.endDate.Date.AddDays(1)) // Date Start, Date End
+            //    .GroupBy(g => new
+            //    {
+            //        ProductId = g.ProductId,
+            //        ProductName = g.Product.Name,
+            //        AccUoM = g.Product.AccUoM,
+            //        ScaleUoM = g.Product.ScaleUoM
+            //    })
+            //    .Select(e => new WbItemNew
+            //    {
+            //        ProductId = e.Key.ProductId,
+            //        ProductName = e.Key.ProductName,
+            //        AccUoM = e.Key.AccUoM,
+            //        ScaleUoM = e.Key.ScaleUoM,
+            //        Quantity = e.Sum(gg => gg.Amount),
+            //    })
+            //    .OrderBy(le => le.ProductId);
+            //var joinedEntries = from p in dbContext.Products
+            //                    join le in entries
+            //                    on p.ProductId equals le.ProductId into grouping
+            //                    select new { p, grouping };
+            //var sql = joinedEntries.AsEnumerable();//.ToQueryString();
+            //Console.WriteLine(sql);
+            //foreach (var entry in joinedEntries.AsEnumerable())
+            //{
+            //    Console.WriteLine(entry.p.ProductId + "\t" + entry.p.Name);
+            //}
+            //foreach (var entry in entries)
+            //{
+            //    Console.WriteLine(entry.ProductId + "\t" + entry.ProductName);
+            //}
+            //outputData.entries = entries;
+            // FIXME: temporary(?) fix to correctly show product names with some databases
             var entries = dbContext.LayoutEntries
                 .Where(le => le.LayoutId == layout.LayoutId
                     && le.Date >= outputData.startDate
                     && le.Date < outputData.endDate.Date.AddDays(1)) // Date Start, Date End
-                .GroupBy(g => new { g.ProductId, ProductName = g.Product.Name, AccUoM = g.Product.AccUoM, ScaleUoM = g.Product.ScaleUoM })
+                .GroupBy(g => g.ProductId)
                 .Select(e => new WbItemNew
                 {
-                    ProductId = e.Key.ProductId,
-                    ProductName = e.Key.ProductName,
-                    AccUoM = e.Key.AccUoM,
-                    ScaleUoM = e.Key.ScaleUoM,
+                    ProductId = e.Key,
                     Quantity = e.Sum(gg => gg.Amount),
                 })
                 .OrderBy(le => le.ProductId);
-            //var sql = entries.ToQueryString();
-            //Console.WriteLine(sql);
-            //foreach(var entry in entries)
-            //{
-            //    Console.WriteLine(entry.ProductId + "\t" + entry.ProductName);
-            //}
-            outputData.entries = entries;
+            outputData.entries = new List<WbItemNew>();
+            foreach (var entry in entries)
+            {
+                var curProduct = dbContext.Products.Find(entry.ProductId);
+                var tmpEntry = new WbItemNew();
+                tmpEntry.ProductId = entry.ProductId;
+                tmpEntry.Quantity = entry.Quantity;
+                tmpEntry.ProductName = curProduct.Name;
+                tmpEntry.AccUoM = curProduct.AccUoM;
+                tmpEntry.ScaleUoM = curProduct.ScaleUoM;
+                (outputData.entries as List<WbItemNew>).Add(tmpEntry);
+            }
 
             if (wbInfoDlg.rbWbOutputXls.IsChecked == true)
             {
@@ -442,7 +480,8 @@ namespace MilFoodReportCard
 
                     if (!Utils.UpperName(outputData.customerPersonName, out var wbCInitials, out var wbCUpper)) { }
 
-                    var context = new TemplateContext(entries);
+                    //var context = new TemplateContext(entries);
+                    var context = new TemplateContext(outputData.entries);
                     context.SetValue("DocumentDate", outputData.docDate);
                     context.SetValue("DocumentNumber", outputData.docNumber);
                     context.SetValue("PeriodStart", outputData.startDate);
@@ -454,9 +493,12 @@ namespace MilFoodReportCard
                     context.SetValue("CustomerPersonNameInitials", wbCInitials);
                     context.SetValue("CustomerPersonNameUpper", wbCUpper);
                     context.SetValue("WbKits", outputData.customerKits);
-                    context.SetValue("WbItemsCount", entries.Count());
-                    context.SetValue("WbItemsCountStr", Utils.Num2Text(entries.Count()));
-                    context.SetValue("WbItems", entries);
+                    //context.SetValue("WbItemsCount", entries.Count());
+                    //context.SetValue("WbItemsCountStr", Utils.Num2Text(entries.Count()));
+                    //context.SetValue("WbItems", entries);
+                    context.SetValue("WbItemsCount", outputData.entries.Count());
+                    context.SetValue("WbItemsCountStr", Utils.Num2Text(outputData.entries.Count()));
+                    context.SetValue("WbItems", outputData.entries);
 
                     //// <YYYY-MM-dd>_<wbNumber>_<customer>
                     var filename = System.IO.Path.Combine(
